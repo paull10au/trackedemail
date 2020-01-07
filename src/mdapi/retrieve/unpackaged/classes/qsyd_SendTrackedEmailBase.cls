@@ -12,7 +12,7 @@
         https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_email_outbound_messaging.htm
         https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_email_outbound_single.htm
 
-     Usage: Assign execution authority for the profiles which will be executing the process builders or flows executing this class.
+     Usage:         Assign execution authority for the profiles which will be executing the process builders or flows executing this class.
 
      History:
      When           Who                 What
@@ -307,7 +307,7 @@ global virtual with sharing class qsyd_SendTrackedEmailBase {
      */
     public static void setUseSignature(Boolean useSignature) {
         if (useSignature != null) {
-            emailMessage.setSaveAsActivity(useSignature);
+            emailMessage.setUseSignature(useSignature);
         }
     }
 
@@ -491,6 +491,16 @@ global virtual with sharing class qsyd_SendTrackedEmailBase {
             }
 
             return emails[0].Id;
+        }
+
+        /**
+         * True if "id" is in the form of objectType id
+         *
+         * @return
+         */
+        public Boolean isIdInstanceOfSObjectType(String id, SObjectType objectType) {
+
+            return (id.trim() instanceOf Id && ((Id) id.trim()).getSobjectType() == objectType);
         }
     }
 

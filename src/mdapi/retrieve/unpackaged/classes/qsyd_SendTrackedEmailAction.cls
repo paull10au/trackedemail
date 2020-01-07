@@ -287,7 +287,7 @@ global with sharing class qsyd_SendTrackedEmailAction extends qsyd_SendTrackedEm
          */
         public Boolean saveEmailAsActivity {
             get {
-                return (this.saveAsActivity == null) ? true : this.saveAsActivity;
+                return (this.isIdInstanceOfSObjectType(this.targetObjectId, Schema.User.SObjectType)) ? false : (this.saveAsActivity == null) ? true : this.saveAsActivity;
             }
             set {
             }

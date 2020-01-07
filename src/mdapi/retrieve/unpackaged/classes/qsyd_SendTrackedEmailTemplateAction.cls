@@ -101,7 +101,7 @@ global with sharing class qsyd_SendTrackedEmailTemplateAction extends qsyd_SendT
         @InvocableVariable(label='Contact, Lead or User Id' description='The Id of the contact, lead, or user to which the email will be sent.' required=true)
         global String targetObjectId;
 
-        @InvocableVariable(label='What Id - If you specify a Contact Id, either an Account, Asset, Campaign, Case, Contract, Opportunity, Order, Product, Solution, Custom' description='If you specify a contact for the targetObjectId field, you can specify an optional whatId as well. Must be either a Account, Asset, Campaign, Case, Contract, Opportunity, Order, Product, Solution, Custom' required=true)
+        @InvocableVariable(label='What Id - If you specify a Contact Id, either an Account, Asset, Campaign, Case, Contract, Opportunity, Order, Product, Solution, Custom' description='If you specify a contact for the targetObjectId field, you can specify an optional whatId as well. Must be either a Account, Asset, Campaign, Case, Contract, Opportunity, Order, Product, Solution, Custom' required=false)
         global String whatId;
 
         @InvocableVariable(label='Parent Message Id ' description='This field identifies the email or emails to which this email is a reply (parent emails).' required=false)
@@ -190,7 +190,7 @@ global with sharing class qsyd_SendTrackedEmailTemplateAction extends qsyd_SendT
             get {
                 throwIfBlank(this.emailTemplate, 'An email template id or name must be provided.');
 
-                return this.isInstanceOfEmailTemplateId() ? emailTemplate.trim() : this.getTemplateId();
+                return this.isIdInstanceOfSObjectType(this.emailTemplate, Schema.EmailTemplate.SObjectType) ? emailTemplate.trim() : this.getTemplateId();
             }
             set {
             }
@@ -256,7 +256,7 @@ global with sharing class qsyd_SendTrackedEmailTemplateAction extends qsyd_SendT
          */
         public Boolean saveEmailAsActivity {
             get {
-                return (this.saveAsActivity == null) ? true : this.saveAsActivity;
+                return (this.isIdInstanceOfSObjectType(this.targetObjectId, Schema.User.SObjectType)) ? false : (this.saveAsActivity == null) ? true : this.saveAsActivity;
             }
             set {
             }
@@ -335,16 +335,6 @@ global with sharing class qsyd_SendTrackedEmailTemplateAction extends qsyd_SendT
             }
 
             return templates[0].Id;
-        }
-
-        /**
-         * True if emailTemplate is an in the form of an email template id
-         *
-         * @return
-         */
-        public Boolean isInstanceOfEmailTemplateId() {
-
-            return (this.emailTemplate.trim() instanceOf Id && ((Id) this.emailTemplate.trim()).getSobjectType() == Schema.EmailTemplate.SObjectType);
         }
     }
 }
